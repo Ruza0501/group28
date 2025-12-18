@@ -51,3 +51,38 @@ new_patient <- data.frame(
 result <- predict_group28(new_patient)
 print(result)
 ```
+
+## Model Performance
+
+The XGBoost model implemented in this package was trained using a
+stratified 5-fold cross-validation protocol. It demonstrates strong
+predictive performance for cardiovascular disease.
+
+### Key Metrics (Test Set)
+
+- **ROC AUC:** 0.7986 (95% CI: 0.791 - 0.806)
+- **Accuracy:** 73.3%
+- **Sensitivity:** 69.2%
+- **Specificity:** 77.4%
+
+### Evaluation Plots
+
+Below is the evaluation overview including ROC Curve, Precision-Recall
+Curve, and Confusion Matrix:
+
+<figure>
+<img src="model_performance.jpg" alt="Model Performance" />
+<figcaption aria-hidden="true">Model Performance</figcaption>
+</figure>
+
+### Feature Importance (Interpretation)
+
+To understand the biological drivers of the prediction, we analyzed
+feature importance using SHAP values. The top predictors include
+**hypertension**, **pulse pressure**, and **age**, which aligns with
+established medical knowledge.
+
+<figure>
+<img src="shap_summary.jpg" alt="SHAP Summary" />
+<figcaption aria-hidden="true">SHAP Summary</figcaption>
+</figure>
