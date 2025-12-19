@@ -65,24 +65,71 @@ predictive performance for cardiovascular disease.
 - **Sensitivity:** 69.2%
 - **Specificity:** 77.4%
 
-### Evaluation Plots
+### 1. Overall Evaluation Overview
 
-Below is the evaluation overview including ROC Curve, Precision-Recall
-Curve, and Confusion Matrix:
+The figure below summarizes the model’s performance, including the ROC
+curve (**AUC = 0.7986**), Precision-Recall curve, Confusion Matrix
+(Accuracy = 73.30%), and Calibration curve.
 
 <figure>
-<img src="model_performance.jpg" alt="Model Performance" />
-<figcaption aria-hidden="true">Model Performance</figcaption>
+<img src="model_performance.jpg" alt="Model Evaluation Overview" />
+<figcaption aria-hidden="true">Model Evaluation Overview</figcaption>
 </figure>
 
-### Feature Importance (Interpretation)
+------------------------------------------------------------------------
 
-To understand the biological drivers of the prediction, we analyzed
-feature importance using SHAP values. The top predictors include
-**hypertension**, **pulse pressure**, and **age**, which aligns with
-established medical knowledge.
+### 2. Feature Importance Analysis
+
+Understanding which biological factors drive the predictions is crucial.
+We analyzed this using XGBoost Gain metric.
+
+#### Top Ranking Features
+
+As shown in the bar plot and table below, **Hypertension**, **Pulse
+Pressure**, and **Age** are identified as the top three most critical
+risk factors related to cardiovascular disease in this model.
 
 <figure>
-<img src="shap_summary.jpg" alt="SHAP Summary" />
-<figcaption aria-hidden="true">SHAP Summary</figcaption>
+<img src="new_feat_bar.jpg" alt="Feature Importance Bar Plot" />
+<figcaption aria-hidden="true">Feature Importance Bar Plot</figcaption>
+</figure>
+
+The exact gain values and other metrics for the top features are
+detailed in the table below:
+
+<figure>
+<img src="new_feat_table.jpg" alt="Feature Importance Table" />
+<figcaption aria-hidden="true">Feature Importance Table</figcaption>
+</figure>
+
+------------------------------------------------------------------------
+
+### 3. Detailed Interpretation (SHAP)
+
+To explain *how* these features influence the risk, we utilized SHAP
+(SHapley Additive exPlanations) values.
+
+#### Global Trend (Beeswarm Plot)
+
+This plot shows the overall impact of features. \* **Yellow dots** =
+High feature values (e.g., high blood pressure). \* **Purple dots** =
+Low feature values. \* Dots further to the **right** indicate a higher
+predicted risk of disease. The plot confirms that high blood pressure
+and high pulse pressure strongly increase disease risk.
+
+<figure>
+<img src="shap_summary.jpg" alt="SHAP Summary Beeswarm" />
+<figcaption aria-hidden="true">SHAP Summary Beeswarm</figcaption>
+</figure>
+
+#### Individual Prediction Example (Waterfall Plot)
+
+This “waterfall” plot illustrates how the model arrived at a prediction
+for a single, specific high-risk patient. It shows how each feature’s
+value pushed the prediction probability up (yellow) or down (purple)
+from the baseline.
+
+<figure>
+<img src="new_shap_waterfall.jpg" alt="SHAP Waterfall Example" />
+<figcaption aria-hidden="true">SHAP Waterfall Example</figcaption>
 </figure>
