@@ -64,7 +64,7 @@ The XGBoost model implemented in this package was trained using a stratified 5-f
 ### 1. Overall Evaluation Overview
 The figure below summarizes the model's performance, including the ROC curve (**AUC = 0.7986**), Precision-Recall curve, Confusion Matrix (Accuracy = 73.30%), and Calibration curve.
 
-![Model Evaluation Overview](model_performance.jpg)
+![Model Evaluation Overview](images/model_performance.jpg)
 
 ---
 
@@ -74,11 +74,11 @@ Understanding which biological factors drive the predictions is crucial. We anal
 #### Top Ranking Features
 As shown in the bar plot and table below, **Hypertension**, **Pulse Pressure**, and **Age** are identified as the top three most critical risk factors related to cardiovascular disease in this model.
 
-![Feature Importance Bar Plot](new_feat_bar.jpg)
+![Feature Importance Bar Plot](images/new_feat_bar.jpg)
 
 The exact gain values and other metrics for the top features are detailed in the table below:
 
-![Feature Importance Table](new_feat_table.jpg)
+![Feature Importance Table](images/new_feat_table.jpg)
 
 ---
 
@@ -92,9 +92,9 @@ This plot shows the overall impact of features.
 * Dots further to the **right** indicate a higher predicted risk of disease.
 The plot confirms that high blood pressure and high pulse pressure strongly increase disease risk.
 
-![SHAP Summary Beeswarm](shap_summary.jpg)
+![SHAP Summary Beeswarm](images/shap_summary.jpg)
 
 #### Individual Prediction Example (Waterfall Plot)
 This "waterfall" plot illustrates how the model arrived at a prediction for a single, specific high-risk patient. It shows how each feature's value pushed the prediction probability up (yellow) or down (purple) from the baseline.
 
-![SHAP Waterfall Example](new_shap_waterfall.jpg)
+![SHAP Waterfall Example](images/new_shap_waterfall.jpg)

@@ -72,7 +72,8 @@ curve (**AUC = 0.7986**), Precision-Recall curve, Confusion Matrix
 (Accuracy = 73.30%), and Calibration curve.
 
 <figure>
-<img src="model_performance.jpg" alt="Model Evaluation Overview" />
+<img src="images/model_performance.jpg"
+alt="Model Evaluation Overview" />
 <figcaption aria-hidden="true">Model Evaluation Overview</figcaption>
 </figure>
 
@@ -90,7 +91,7 @@ Pressure**, and **Age** are identified as the top three most critical
 risk factors related to cardiovascular disease in this model.
 
 <figure>
-<img src="new_feat_bar.jpg" alt="Feature Importance Bar Plot" />
+<img src="images/new_feat_bar.jpg" alt="Feature Importance Bar Plot" />
 <figcaption aria-hidden="true">Feature Importance Bar Plot</figcaption>
 </figure>
 
@@ -98,7 +99,7 @@ The exact gain values and other metrics for the top features are
 detailed in the table below:
 
 <figure>
-<img src="new_feat_table.jpg" alt="Feature Importance Table" />
+<img src="images/new_feat_table.jpg" alt="Feature Importance Table" />
 <figcaption aria-hidden="true">Feature Importance Table</figcaption>
 </figure>
 
@@ -118,7 +119,7 @@ predicted risk of disease. The plot confirms that high blood pressure
 and high pulse pressure strongly increase disease risk.
 
 <figure>
-<img src="shap_summary.jpg" alt="SHAP Summary Beeswarm" />
+<img src="images/shap_summary.jpg" alt="SHAP Summary Beeswarm" />
 <figcaption aria-hidden="true">SHAP Summary Beeswarm</figcaption>
 </figure>
 
@@ -130,6 +131,6 @@ value pushed the prediction probability up (yellow) or down (purple)
 from the baseline.
 
 <figure>
-<img src="new_shap_waterfall.jpg" alt="SHAP Waterfall Example" />
+<img src="images/new_shap_waterfall.jpg" alt="SHAP Waterfall Example" />
 <figcaption aria-hidden="true">SHAP Waterfall Example</figcaption>
 </figure>
