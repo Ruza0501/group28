@@ -1,18 +1,45 @@
-#' Group 28 Prediction Model
+#' Group 28 Cardiovascular Disease Prediction Model (XGBoost)
 #'
-#' This function accepts a dataframe of biological features and returns
-#' the prediction outcome using a pre-trained XGBoost workflow.
+#' Uses the pre-trained tidymodels workflow (XGBoost) shipped with \code{group28} to
+#' generate binary predictions (\code{disease} / \code{no_disease}) from patient
+#' clinical features.
 #'
 #' @details
-#' The input dataframe must contain specific columns with correct data types:
+#' \code{new_data} must be a data.frame/tibble and include all feature columns used
+#' during training (base clinical variables plus engineered features). Categorical
+#' columns must use the same levels as training, otherwise \code{predict()} may fail.
+#'
+#' The fitted workflow is distributed as an RDS file at
+#' \code{inst/extdata/final_fit_workflow.rds} and is located via \code{system.file()}.
+#'
+#' \strong{Numeric/integer columns (units)}
 #' \itemize{
-#'   \item Categorical columns (gender, smoke, alco, active, bmi_class) should be factors.
-#'   \item Ordered factors (cholesterol, gluc) must be ordered factor types.
-#'   \item Hypertension must be an integer (0 or 1).
+#'   \item \code{age}: age in days (Kaggle original field).
+#'   \item \code{height}: height in cm.
+#'   \item \code{weight}: weight in kg.
+#'   \item \code{ap_hi}: systolic blood pressure (mmHg).
+#'   \item \code{ap_lo}: diastolic blood pressure (mmHg).
+#'   \item \code{age_years}: age in years, typically \code{age / 365.25}.
+#'   \item \code{bmi}: BMI, typically \code{weight / (height/100)^2}.
+#'   \item \code{pulse_pressure}: pulse pressure, typically \code{ap_hi - ap_lo}.
+#'   \item \code{map}: mean arterial pressure (MAP), typically \code{ap_lo + (ap_hi - ap_lo)/3}.
+#'   \item \code{hypertension}: hypertension indicator, integer 0/1 (e.g. 1 if \code{ap_hi>=140} or \code{ap_lo>=90}).
 #' }
 #'
-#' @param new_data A data.frame containing the required feature columns.
-#' @return A tibble containing the predicted class (e.g., "disease" or "no_disease").
+#' \strong{Categorical/ordinal columns (use factor/ordered)}
+#' \itemize{
+#'   \item \code{gender}: factor with levels \code{c("female", "male")}.
+#'   \item \code{cholesterol}: ordered/factor with levels \code{c("normal","above_normal","well_above_normal")} (original coding: 1=normal, 2=above normal, 3=well above normal).
+#'   \item \code{gluc}: ordered/factor with levels \code{c("normal","above_normal","well_above_normal")} (same meaning as above).
+#'   \item \code{smoke}: factor with levels \code{c("no", "yes")}.
+#'   \item \code{alco}: factor with levels \code{c("no", "yes")}.
+#'   \item \code{active}: factor with levels \code{c("no", "yes")}.
+#'   \item \code{bmi_class}: factor (e.g. \code{c("underweight","normal","overweight","obese")}); rare levels are collapsed to \code{"other"} during preprocessing.
+#' }
+#'
+#' @param new_data A data.frame/tibble of features for prediction; each row is one subject.
+#' @return A tibble with a predicted class column (usually \code{.pred_class}), taking values \code{disease} or \code{no_disease}.
+#' @seealso \code{\link[stats:predict]{predict}}
 #'
 #' @author
 #' Zihao Wang \email{Zihao.Wang2302@student.xjtlu.edu.cn}
@@ -27,21 +54,37 @@
 #' \dontrun{
 #'   library(group28)
 #'   # Create example data
-#'   test_data <- data.frame(
-#'     age = 20000, height = 165, weight = 68, ap_hi = 120, ap_lo = 80,
-#'     age_years = 54, bmi = 24.9, pulse_pressure = 40, map = 93.3,
-#'     hypertension = 0, # Integer
+#'   new_patient <- data.frame(
+#'     age = 20000,
+#'     height = 165,
+#'     weight = 68,
+#'     ap_hi = 120,
+#'     ap_lo = 80,
+#'     age_years = 20000 / 365.25,
+#'     bmi = 68 / (1.65^2),
+#'     pulse_pressure = 120 - 80,
+#'     map = 80 + (120 - 80) / 3,
+#'     hypertension = 0L,
 #'     gender = factor("male", levels = c("female", "male")),
-#'     cholesterol = ordered("normal", levels = c("normal", "above_normal", "well_above_normal")),
-#'     gluc = ordered("normal", levels = c("normal", "above_normal", "well_above_normal")),
+#'     cholesterol = factor(
+#'       1,
+#'       levels = c(1, 2, 3),
+#'       labels = c("normal", "above_normal", "well_above_normal"),
+#'       ordered = TRUE
+#'     ),
+#'     gluc = factor(
+#'       1,
+#'       levels = c(1, 2, 3),
+#'       labels = c("normal", "above_normal", "well_above_normal"),
+#'       ordered = TRUE
+#'     ),
 #'     smoke = factor("no", levels = c("no", "yes")),
 #'     alco = factor("no", levels = c("no", "yes")),
 #'     active = factor("yes", levels = c("no", "yes")),
-#'     bmi_class = factor("normal", levels = c("normal", "overweight", "obese", "other"))
+#'     bmi_class = factor("normal", levels = c("underweight", "normal", "overweight", "obese"))
 #'   )
 #'
-#'   # Predict
-#'   predict_group28(test_data)
+#'   predict_group28(new_patient)
 #' }
 predict_group28 <- function(new_data) {
   # 1. Check input
@@ -57,3 +100,4 @@ predict_group28 <- function(new_data) {
   # 4. Predict
   predict(model, new_data)
 }
+
